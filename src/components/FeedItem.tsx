@@ -2,11 +2,11 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { FC } from 'react'
 
+type FeedItem = {
+  [key: string]: any
+}
 interface FeedItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  item: {
-    title: string
-    contentSnippet: string
-  }
+  item: FeedItem
   highlighted?: boolean
 }
 

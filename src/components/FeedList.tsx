@@ -1,7 +1,11 @@
-import Link from 'next/link'
+import getFeedByURL from '@/lib/getFeedByURL'
+
 import FeedItem from './FeedItem'
 
-export default function FeedList() {
+export default async function FeedList() {
+  const feed = await getFeedByURL('https://www.smashingmagazine.com/feed/')
+  const featuredItems = feed.items.slice(0, 3)
+  const restItems = feed.items.slice(3, Math.min(feed.items.length, 10))
   return (
     <ul
       className="mx-auto grid max-w-6xl grid-cols-1
@@ -10,30 +14,18 @@ export default function FeedList() {
                 sm:grid-cols-2 sm:px-6 sm:py-16 
                 lg:grid-cols-3 lg:px-8 lg:py-20"
     >
-      {[1, 2, 3].map(function richCards(item) {
+      {featuredItems.map(function featuredItems(item) {
         return (
-          <li key={item}>
-            <FeedItem
-              item={{
-                title: 'Content Heading',
-                contentSnippet: 'article.contentSnippet'
-              }}
-              highlighted
-            />
+          <li key={item.guid}>
+            <FeedItem item={item} highlighted />
           </li>
         )
       })}
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].map(function richCards(
-        item
-      ) {
+      <hr className="my-4 w-full border-gray-200" />
+      {restItems.map(function restItems(item) {
         return (
-          <li key={item}>
-            <FeedItem
-              item={{
-                title: 'Second Content Heading',
-                contentSnippet: 'Second article.contentSnippet'
-              }}
-            />
+          <li key={item.guid}>
+            <FeedItem item={item} />
           </li>
         )
       })}

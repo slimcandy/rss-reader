@@ -1,5 +1,6 @@
 import { RssIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+
 import ModalButton from './ModalButton'
 
 export default function Header() {
