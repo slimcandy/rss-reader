@@ -21,7 +21,6 @@ export default async function FeedList() {
           </li>
         )
       })}
-      <hr className="my-4 w-full border-gray-200" />
       {restItems.map(function restItems(item) {
         return (
           <li key={item.guid}>
