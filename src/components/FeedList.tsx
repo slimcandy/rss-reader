@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import FeedItem from './FeedItem'
 
 export default function FeedList() {
   return (
@@ -12,17 +13,13 @@ export default function FeedList() {
       {[1, 2, 3].map(function richCards(item) {
         return (
           <li key={item}>
-            <article className="mb-4 rounded bg-white p-4 shadow">
-              <Link
-                href="article.link"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 block text-2xl font-bold text-blue-500 hover:underline"
-              >
-                article.title
-              </Link>
-              <p className="mt-2 text-gray-700">article.contentSnippet</p>
-            </article>
+            <FeedItem
+              item={{
+                title: 'Content Heading',
+                contentSnippet: 'article.contentSnippet'
+              }}
+              highlighted
+            />
           </li>
         )
       })}
@@ -31,17 +28,12 @@ export default function FeedList() {
       ) {
         return (
           <li key={item}>
-            <article className="mb-4 rounded bg-white p-4 shadow">
-              <Link
-                href="article.link"
-                target="_blank"
-                rel="noreferrer"
-                className="text-xl font-bold text-blue-500 hover:underline"
-              >
-                article.title
-              </Link>
-              <p className="mt-2 text-gray-700">article.contentSnippet</p>
-            </article>
+            <FeedItem
+              item={{
+                title: 'Second Content Heading',
+                contentSnippet: 'Second article.contentSnippet'
+              }}
+            />
           </li>
         )
       })}
