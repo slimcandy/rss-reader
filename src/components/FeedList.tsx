@@ -1,10 +1,10 @@
 import { getFeedByURLs } from '@/lib/getFeed'
-import getURLsFromCookie from '@/lib/getURLsFromCookie'
+import { getURLsFromCookie } from '@/lib/cookieStore'
 
 import FeedItem from './FeedItem'
 
 export default async function FeedList() {
-  const feedURLs = getURLsFromCookie()
+  const feedURLs = await getURLsFromCookie()
   if (feedURLs.length === 0) {
     return (
       <div className="text-center">
@@ -19,6 +19,7 @@ export default async function FeedList() {
 
   const feeds = await getFeedByURLs(feedURLs)
   const items = feeds
+    .filter(feed => feed.items !== null && feed.items.length > 0)
     .flatMap(feed => feed.items)
     .sort((a, b) => {
       return new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime()

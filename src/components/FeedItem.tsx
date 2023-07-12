@@ -16,6 +16,8 @@ const FeedItem: FC<FeedItemProps> = function FeedItem({
   highlighted = false,
   ...props
 }) {
+  const title = item.title.length > 0 ? item.title : item.link
+  const description = item.description || item.contentSnippet || ''
   return (
     <article
       className={clsx('mb-4 rounded bg-white p-4 shadow', className)}
@@ -29,9 +31,9 @@ const FeedItem: FC<FeedItemProps> = function FeedItem({
           !highlighted && 'text-xl'
         )}
       >
-        {item.title}
+        {title}
       </Link>
-      <p className="mt-2 text-gray-700">{item.contentSnippet}</p>
+      <p className="mt-2 text-gray-700">{description}</p>
     </article>
   )
 }
