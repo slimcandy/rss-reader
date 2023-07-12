@@ -2,11 +2,11 @@ import Link from 'next/link'
 import clsx from 'clsx'
 import { FC } from 'react'
 
-type FeedItem = {
-  [key: string]: any
-}
+import { RSSFeedItem } from '@/lib/getFeed'
+import formatDate from '@/lib/formatDate'
+
 interface FeedItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  item: FeedItem
+  item: RSSFeedItem
   highlighted?: boolean
 }
 
@@ -20,20 +20,34 @@ const FeedItem: FC<FeedItemProps> = function FeedItem({
   const description = item.description || item.contentSnippet || ''
   return (
     <article
-      className={clsx('mb-4 rounded bg-white p-4 shadow', className)}
+      className={clsx(
+        highlighted && 'prose-lg border-2 border-double border-amber-900',
+        !highlighted && 'prose border-b-2 border-amber-200',
+        'px-4 py-6',
+        className
+      )}
       {...props}
     >
-      <Link
-        href="article.link"
-        className={clsx(
-          'mt-2 block font-bold text-blue-500 hover:underline',
-          highlighted && 'text-2xl',
-          !highlighted && 'text-xl'
+      <header>
+        {item.pubDate && (
+          <small>
+            <time dateTime={item.pubDate}>{formatDate(item.pubDate)}</time>
+          </small>
         )}
-      >
-        {title}
-      </Link>
-      <p className="mt-2 text-gray-700">{description}</p>
+        <Link href={item.link} rel="noopener noreferrer nofollow">
+          <h2 className="mt-2">{title}</h2>
+        </Link>
+      </header>
+      <main>
+        <p className="line-clamp-6">{description}</p>
+      </main>
+      <footer>
+        <Link href={item.link} rel="noopener noreferrer nofollow">
+          <small className="badge badge-outline">
+            {new URL(item.link).hostname.replace(/^www\./, '')}
+          </small>
+        </Link>
+      </footer>
     </article>
   )
 }

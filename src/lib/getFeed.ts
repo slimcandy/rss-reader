@@ -2,7 +2,7 @@
 
 import Parser from 'rss-parser'
 
-interface RSSFeedItem {
+export interface RSSFeedItem {
   title: string
   link: string
   description: string

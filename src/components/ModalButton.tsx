@@ -28,38 +28,46 @@ export default function ModalButton() {
 
   return (
     <>
-      <button className="btn" onClick={openModal}>
+      <button className="btn flex-nowrap" onClick={openModal}>
         <PlusCircleIcon className="mr-1 inline-block h-5 w-5" />
         Add RSS Feed
       </button>
       <Dialog
         open={isModalOpen}
         onClose={closeModal}
-        className="card-bordered card absolute top-8 w-96 bg-base-100 shadow-xl ring-8 lg:w-1/2"
+        className="card-bordered card absolute left-1/2 top-1/2 w-1/2 min-w-fit max-w-full -translate-x-1/2 -translate-y-1/2 transform border-2 border-amber-900 bg-amber-100 bg-opacity-95 shadow-2xl shadow-amber-700"
       >
         <Dialog.Panel className="card-body">
-          <Dialog.Title className="card-title">Add RSS Feed</Dialog.Title>
-
-          <form name="add-feed" action={handleAddFeed}>
-            <div className="join">
-              <label className="sr-only">Feed URL</label>
-              <input
-                className="input-bordered input-primary input join-item"
-                type="url"
-                placeholder="https://example.com/rss.xml"
-                value={url}
-                onChange={handleURLChange}
-                list="feeds"
-                required
-              />
-              <button
-                type="submit"
-                className="btn-primary join-item btn rounded-r-full"
-              >
-                Add Feed
+          <div className="flex flex-col justify-between lg:flex-row">
+            <div className="card-actions order-1 justify-end lg:order-2">
+              <button className="btn-ghost btn-sm btn" onClick={closeModal}>
+                <kbd className="kbd kbd-sm">Esc</kbd> Close
               </button>
             </div>
-            <input list="feeds" id="feedInput" name="feedInput" />
+            <Dialog.Title className="card-title order-2 mb-2 lg:order-1 lg:mb-4">
+              Add a New RSS Feed
+            </Dialog.Title>
+          </div>
+
+          <form
+            name="add-feed"
+            action={handleAddFeed}
+            className="flex w-full flex-col gap-y-2 lg:gap-y-4"
+          >
+            <label className="sr-only">Feed URL</label>
+            <input
+              className="input-bordered input-primary input w-full"
+              type="url"
+              placeholder="https://example.com/rss.xml"
+              value={url}
+              onChange={handleURLChange}
+              list="feeds"
+              autoFocus={isModalOpen}
+              required
+            />
+            <button type="submit" className="btn-primary btn max-w-fit">
+              Add Feed
+            </button>
 
             <datalist id="feeds">
               <option value="https://www.reddit.com/.rss">Reddit</option>
@@ -90,12 +98,6 @@ export default function ModalButton() {
               </option>
             </datalist>
           </form>
-          <div className="card-actions justify-end">
-            <button className="btn-sm btn" onClick={closeModal}>
-              <XCircleIcon className="mr-1 inline-block h-5 w-5" />
-              Close modal
-            </button>
-          </div>
         </Dialog.Panel>
       </Dialog>
     </>

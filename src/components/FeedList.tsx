@@ -25,16 +25,10 @@ export default async function FeedList() {
       return new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime()
     })
   const featuredItems = items.slice(0, 3)
-  const restItems = items.slice(3)
+  const restItems = items.slice(3, Math.min(items.length, 25))
 
   return (
-    <ul
-      className="mx-auto grid max-w-6xl grid-cols-1
-                gap-6 
-                px-4 py-12 
-                sm:grid-cols-2 sm:px-6 sm:py-16 
-                lg:grid-cols-3 lg:px-8 lg:py-20"
-    >
+    <ul className="mx-auto my-2 flex max-w-screen-md flex-col gap-y-4">
       {featuredItems.map(function featuredItems(item) {
         return (
           <li key={item.guid}>
