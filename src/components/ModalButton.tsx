@@ -35,12 +35,12 @@ export default function ModalButton() {
       <Dialog
         open={isModalOpen}
         onClose={closeModal}
-        className="card-bordered card absolute left-1/2 top-1/2 w-1/2 min-w-fit max-w-full -translate-x-1/2 -translate-y-1/2 transform border-2 border-amber-900 bg-amber-100 bg-opacity-95 shadow-2xl shadow-amber-700"
+        className="card card-bordered absolute left-1/2 top-1/2 w-1/2 min-w-fit max-w-full -translate-x-1/2 -translate-y-1/2 transform border-2 border-amber-900 bg-amber-100 bg-opacity-95 shadow-2xl shadow-amber-700"
       >
         <Dialog.Panel className="card-body">
           <div className="flex flex-col justify-between lg:flex-row">
             <div className="card-actions order-1 justify-end lg:order-2">
-              <button className="btn-ghost btn-sm btn" onClick={closeModal}>
+              <button className="btn btn-ghost btn-sm" onClick={closeModal}>
                 <kbd className="kbd kbd-sm">Esc</kbd> Close
               </button>
             </div>
@@ -56,7 +56,7 @@ export default function ModalButton() {
           >
             <label className="sr-only">Feed URL</label>
             <input
-              className="input-bordered input-primary input w-full"
+              className="input input-bordered input-primary w-full"
               type="url"
               placeholder="https://example.com/rss.xml"
               value={url}
@@ -65,7 +65,7 @@ export default function ModalButton() {
               autoFocus={isModalOpen}
               required
             />
-            <button type="submit" className="btn-primary btn max-w-fit">
+            <button type="submit" className="btn btn-primary max-w-fit">
               Add Feed
             </button>
 

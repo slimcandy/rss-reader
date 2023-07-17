@@ -1,72 +1,94 @@
 'use server'
 
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies'
 import { cookies } from 'next/headers'
+
+const cookieSingleton = (function () {
+  let instance: ReadonlyRequestCookies | null = null
+
+  function createInstance() {
+    const cookiesList = cookies()
+    return cookiesList
+  }
+
+  return {
+    getInstance: function () {
+      if (!instance) {
+        instance = createInstance()
+      }
+      return instance
+    }
+  }
+})()
 
 export async function clearCookie(
   cookieName: string = 'feed-list',
   error: any = ''
 ) {
-  console.error("Can't get cookie" + error)
+  const cookiesList = cookieSingleton.getInstance()
+  const hasCookie = Boolean(cookiesList.get(cookieName))
+  if (hasCookie) {
+    cookiesList.delete(cookieName)
+  }
 
-  const cookieStore = cookies()
-  cookieStore.delete(cookieName)
+  console.error('⚠️ ' + error)
 }
 
-export async function getURLsFromCookie(cookieName: string = 'feed-list') {
-  const cookieStore = cookies()
-  const cookieValue = cookieStore.get(cookieName)?.value
-  if (typeof cookieValue === 'string') {
+export async function getURLsFromCookie(
+  cookieName: string = 'feed-list'
+): Promise<string[]> {
+  const cookiesList = cookieSingleton.getInstance()
+  const hasCookie = Boolean(cookiesList.get(cookieName))
+
+  if (hasCookie) {
+    const cookieValue = cookiesList.get(cookieName)!.value
     let feedList
     try {
       feedList = JSON.parse(cookieValue)
     } catch (error) {
-      clearCookie(cookieName, error)
+      console.error('⚠️ ' + error)
     }
     if (Array.isArray(feedList)) {
       return feedList
     } else {
-      clearCookie(cookieName, 'feedList is not array')
+      console.error('⚠️ Cookie value is not an array')
       return []
     }
+  } else {
+    return []
   }
-  clearCookie(cookieName, 'cookieValue is not string')
-  return []
 }
 
 export async function setURLToCookie(
   url: string,
   cookieName: string = 'feed-list'
-) {
-  console.log('setURLToCookie', url)
-  const cookieStore = cookies()
-  let cookie
-  try {
-    cookie = cookieStore.get(cookieName)
-  } catch (error) {
-    throw "Can't get cookie" + error
-  }
-  const cookieValue = typeof cookie === 'undefined' ? '[]' : cookie.value
-  let feedList
-  try {
-    feedList = JSON.parse(cookieValue)
-  } catch (error) {
-    clearCookie(cookieName, error)
-    return false
-  }
-  if (Array.isArray(feedList)) {
-    if (feedList.includes(url)) {
-      return true
-    }
-    try {
-      feedList.push(url)
-      cookieStore.set(cookieName, JSON.stringify(feedList))
-    } catch (error) {
-      console.error(error)
-    }
+): Promise<boolean> {
+  const cookiesList = cookieSingleton.getInstance()
+  const hasCookie = Boolean(cookiesList.get(cookieName))
+  let feedList: string[] = []
 
-    return true
-  } else {
-    console.error('feedList is not array')
-    return false
+  if (hasCookie) {
+    // append to cookie
+    const cookieValue = cookiesList.get(cookieName)!.value
+    let jsonValue
+    try {
+      jsonValue = JSON.parse(cookieValue)
+    } catch (error) {
+      // cannot parse cookie
+      clearCookie(cookieName, error)
+      return false
+    }
+    if (!Array.isArray(jsonValue)) {
+      clearCookie(cookieName, '⚠️ feedList is not array')
+      return false
+    }
   }
+
+  if (!feedList.includes(url)) {
+    feedList.push(url)
+  }
+
+  cookiesList.set(cookieName, JSON.stringify(feedList))
+
+  return true
 }
