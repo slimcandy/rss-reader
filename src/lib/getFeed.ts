@@ -44,7 +44,7 @@ export async function getFeedByURL(url: string) {
     const feed = (await parser.parseURL(url)) as RSSFeed
     return feed
   } catch (error) {
-    throw "Can't get feed by url: " + error + ' url: ' + url
+    throw "❌ Can't get feed by url: " + error + ' url: ' + url
   }
 }
 
@@ -59,6 +59,6 @@ export async function getFeedByURLs(urls: string[]) {
   const fulfilledFeedsValue = fulfilledFeeds.map(feed => feed.value)
   const rejectedFeedsReason = rejectedFeeds.map(feed => feed.reason)
 
-  console.warn('getFeedByURLs: rejectedFeedsReason:', rejectedFeedsReason)
+  console.warn('⚠️ Rejected RSS Feed:', rejectedFeedsReason)
   return fulfilledFeedsValue
 }
